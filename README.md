@@ -4,6 +4,16 @@
 
 <h1 align="center">自己人 · 年底礼品分拣</h1>
 
+![GitHub last commit](https://img.shields.io/github/last-commit/Conflux-336/ziji-ren)
+![GitHub repo size](https://img.shields.io/github/repo-size/Conflux-336/ziji-ren)
+![Website](https://img.shields.io/website?down_message=offline&up_message=online&url=https%3A%2F%2Fconflux-336.github.io%2Fziji-ren%2F)
+![License](https://img.shields.io/github/license/Conflux-336/ziji-ren)
+
+![HTML5](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/-CSS3-1572B6?logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=black)
+
+![Non-Commercial](https://img.shields.io/badge/usage-non--commercial-blue)
 <p align="center">
   <a href="https://conflux-336.github.io/ziji-ren/"><img src="https://img.shields.io/badge/PLAY-ONLINE-ad3a2d?style=for-the-badge&labelColor=2f2a24" alt="在线游玩"></a>
   <img src="https://img.shields.io/badge/60S-CHALLENGE-2f6dc4?style=for-the-badge&labelColor=2f2a24" alt="60 秒挑战">
