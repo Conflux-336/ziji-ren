@@ -1,27 +1,22 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="自己人 · 年底礼品分拣" width="100%">
+  <a href="https://conflux-336.github.io/ziji-ren/"><img src="https://img.shields.io/badge/PLAY-ONLINE-ad3a2d?style=for-the-badge&labelColor=2f2a24" alt="在线游玩"></a>
+  <img src="https://img.shields.io/badge/60S-CHALLENGE-2f6dc4?style=for-the-badge&labelColor=2f2a24" alt="60 秒挑战">
+  <img src="https://img.shields.io/badge/6-BADGE_TYPES-4f6d46?style=for-the-badge&labelColor=2f2a24" alt="六类工牌">
 </p>
 
 <h1 align="center">自己人 · 年底礼品分拣</h1>
 
-![GitHub last commit](https://img.shields.io/github/last-commit/Conflux-336/ziji-ren)
-![GitHub repo size](https://img.shields.io/github/repo-size/Conflux-336/ziji-ren)
-![Website](https://img.shields.io/website?down_message=offline&up_message=online&url=https%3A%2F%2Fconflux-336.github.io%2Fziji-ren%2F)
-![License](https://img.shields.io/github/license/Conflux-336/ziji-ren)
-
-![HTML5](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/-CSS3-1572B6?logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=black)
-
-![Non-Commercial](https://img.shields.io/badge/usage-non--commercial-blue)
 <p align="center">
-  <a href="https://conflux-336.github.io/ziji-ren/"><img src="https://img.shields.io/badge/PLAY-ONLINE-ad3a2d?style=for-the-badge&labelColor=2f2a24" alt="在线游玩"></a>
-  <img src="https://img.shields.io/badge/60S-CHALLENGE-2f6dc4?style=for-the-badge&labelColor=2f2a24" alt="60 秒挑战">
-  <img src="https://img.shields.io/badge/6-BADGE_TYPES-4f6d46?style=for-the-badge&labelColor=2f2a24" alt="六类工牌">
   <img src="https://img.shields.io/badge/HTML5-e34f26?style=for-the-badge&labelColor=2f2a24&logo=html5&logoColor=white" alt="HTML5">
   <img src="https://img.shields.io/badge/VANILLA_JS-f7df1e?style=for-the-badge&labelColor=2f2a24&logo=javascript&logoColor=black" alt="原生 JavaScript">
   <img src="https://img.shields.io/badge/RESPONSIVE-DESKTOP_%2B_MOBILE-6d5da8?style=for-the-badge&labelColor=2f2a24" alt="桌面与移动端适配">
   <img src="https://img.shields.io/badge/NONCOMMERCIAL-无广告_无赞助-c5853d?style=for-the-badge&labelColor=2f2a24" alt="非商用">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/last-commit/Conflux-336/ziji-ren?style=flat-square" alt="Last Commit">
+  <img src="https://img.shields.io/github/repo-size/Conflux-336/ziji-ren?style=flat-square" alt="Repo Size">
+  <img src="https://img.shields.io/github/license/Conflux-336/ziji-ren?style=flat-square" alt="License">
 </p>
 
 <p align="center">
