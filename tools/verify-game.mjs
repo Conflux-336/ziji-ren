@@ -128,7 +128,7 @@ try {
   for (const dir of [-1, -1, -1, 1, 1, 1]) {
     report.drill.push(await evaluate(`({tip:document.getElementById('tip').textContent,entity:document.querySelector('#stage .mc:not(.back) .contract b').textContent})`));
     await evaluate(`__ZJ.commit(${dir})`);
-    await sleep(430);
+    await sleep(520);
   }
   report.drillScore = await evaluate(`Number(document.getElementById('cnt').textContent)`);
 
@@ -168,7 +168,7 @@ try {
   report.mobilePenalty = await evaluate(`({visible:!document.getElementById('penalty').hidden,seconds:document.getElementById('penaltyNum').textContent,box:document.getElementById('penalty').getBoundingClientRect().toJSON()})`);
   await shot('/tmp/zj-mobile-penalty.png');
 
-  report.externalRequests = [...new Set(requests.filter(url => /^https?:/.test(url) && !url.startsWith(BASE) && !url.startsWith('http://localhost:8137')))];
+  report.externalRequests = [...new Set(requests.filter(url => /^https?:/.test(url) && new URL(url).origin !== new URL(BASE).origin))];
   report.consoleIssues = consoleIssues;
   console.log(JSON.stringify(report, null, 2));
 } finally {
