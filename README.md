@@ -1,11 +1,17 @@
 <p align="center">
+  <img src="docs/banner.svg" alt="自己人 · 年底礼品分拣" width="100%">
+</p>
+
+<h1 align="center">自己人 · 年底礼品分拣</h1>
+
+<!-- 游戏入口与核心特色（醒目大字） -->
+<p align="center">
   <a href="https://conflux-336.github.io/ziji-ren/"><img src="https://img.shields.io/badge/PLAY-ONLINE-ad3a2d?style=for-the-badge&labelColor=2f2a24" alt="在线游玩"></a>
   <img src="https://img.shields.io/badge/60S-CHALLENGE-2f6dc4?style=for-the-badge&labelColor=2f2a24" alt="60 秒挑战">
   <img src="https://img.shields.io/badge/6-BADGE_TYPES-4f6d46?style=for-the-badge&labelColor=2f2a24" alt="六类工牌">
 </p>
 
-<h1 align="center">自己人 · 年底礼品分拣</h1>
-
+<!-- 技术栈与非商用声明 -->
 <p align="center">
   <img src="https://img.shields.io/badge/HTML5-e34f26?style=for-the-badge&labelColor=2f2a24&logo=html5&logoColor=white" alt="HTML5">
   <img src="https://img.shields.io/badge/VANILLA_JS-f7df1e?style=for-the-badge&labelColor=2f2a24&logo=javascript&logoColor=black" alt="原生 JavaScript">
@@ -13,6 +19,7 @@
   <img src="https://img.shields.io/badge/NONCOMMERCIAL-无广告_无赞助-c5853d?style=for-the-badge&labelColor=2f2a24" alt="非商用">
 </p>
 
+<!-- GitHub 仓库状态（小巧不抢眼） -->
 <p align="center">
   <img src="https://img.shields.io/github/last-commit/Conflux-336/ziji-ren?style=flat-square" alt="Last Commit">
   <img src="https://img.shields.io/github/repo-size/Conflux-336/ziji-ren?style=flat-square" alt="Repo Size">
