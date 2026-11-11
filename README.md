@@ -16,6 +16,8 @@
   <img src="https://img.shields.io/badge/HTML5-e34f26?style=for-the-badge&labelColor=2f2a24&logo=html5&logoColor=white" alt="HTML5">
   <img src="https://img.shields.io/badge/VANILLA_JS-f7df1e?style=for-the-badge&labelColor=2f2a24&logo=javascript&logoColor=black" alt="原生 JavaScript">
   <img src="https://img.shields.io/badge/RESPONSIVE-DESKTOP_%2B_MOBILE-6d5da8?style=for-the-badge&labelColor=2f2a24" alt="桌面与移动端适配">
+  <img src="https://img.shields.io/badge/3-LANGUAGES-111827?style=for-the-badge&labelColor=2f2a24" alt="简中 / English / 日本語">
+  <img src="https://img.shields.io/badge/KEYBOARD-ARROW_KEYS-36414e?style=for-the-badge&labelColor=2f2a24" alt="键盘方向键操作">
   <img src="https://img.shields.io/badge/NONCOMMERCIAL-无广告_无赞助-c5853d?style=for-the-badge&labelColor=2f2a24" alt="非商用">
 </p>
 
@@ -57,10 +59,12 @@
 ## ✨ 特性速览
 
 - 🪪 **六类工牌，一条规则** — 正编、实习生、合作方往左发；内包、外包、服务商往右退回。判断只看签约主体。
+- 🌐 **简中 / English / 日本語** — 右上角一键切换，界面、工牌、结算、榜单与 Canvas 海报全部跟随；首次访问按浏览器语言自动检测，选择持久化在本地。
 - 🎭 **故意让人看走眼** — 工牌不印身份标签；五种织带配色在六类工牌间随机；姓名、岗位、邮箱和头像也不参与判定。
 - 🏢 **合作方大厂也有年货** — 曜辰、瀚海、赤曜、青梧四家虚构合作方，与星潮科技一样往左发。
 - ⏱️ **60 秒，没有上限** — 正确分拣越多越好，不设固定工牌数量，也没有礼盒库存上限。
 - ⏸️ **错一次，停四秒** — 错误不扣分，但 HR 会当场变脸，画面暂停分拣并显示 4 秒倒计时。
+- ⌨️ **电脑端键盘可玩** — 桌面端按 <kbd>←</kbd> 往左发、<kbd>→</kbd> 往右退回，与拖拽完全等价；输入框打字时不会误触发。
 - 🎨 **完整 2D 插画舞台** — 办公室、礼盒、纸箱、台历与 HR 全部由本地 Irasutoya 素材和 CSS 分层组成。
 - 🔒 **本地优先** — 无后端、无账号、无统计脚本；运行时零外部请求，成绩和榜单只存在浏览器 `localStorage`。
 - 🖼️ **结算海报** — 使用 Canvas 现场绘制成绩工牌与海报，可在本机保存分享。
@@ -88,7 +92,7 @@
 | 对局时长 | 60 秒 |
 | 正确分拣 | 每份 +1，正确数量无上限 |
 | 错误分拣 | 本次不计分，暂停分拣 4 秒 |
-| 操作方式 | 按住工牌向左或向右拖动，松手发放 |
+| 操作方式 | 按住工牌向左或向右拖动，松手发放；电脑端可按 <kbd>←</kbd> / <kbd>→</kbd> 方向键分拣 |
 | 教学 | 首次进入依次出现六张示例工牌，覆盖全部类型 |
 | 结算 | 显示正确数、错发数、误退数与本机最好成绩 |
 | 榜单 | 本地演示榜单，不采集真实用户信息 |
@@ -133,12 +137,14 @@ http://localhost:8137/
 ```text
 ziji-ren/
 ├── index.html                  # 单页游戏：DOM 舞台、工牌逻辑、海报、榜单
+├── i18n.js                     # 三语字典、模板插值与语言检测（无依赖 IIFE）
 ├── assets/irasutoya/           # 35 件本地插画素材、manifest 与 CREDITS
 ├── vendor/qrcode.min.js        # 本地二维码生成库
 ├── tools/
 │   ├── fetch-irasutoya.mjs     # 下载并校验基础素材
 │   ├── fetch-anime-assets.mjs  # 合作方头像与独立素材批次
-│   └── verify-game.mjs         # 无头 Chrome 端到端回归
+│   ├── verify-game.mjs         # 无头 Chrome 端到端回归
+│   └── verify-i18n.mjs         # 三语字典结构、切换与持久化专项回归
 ├── docs/                       # README 横幅与截图
 └── .gitignore
 ```
@@ -148,6 +154,7 @@ ziji-ren/
 | 层 | 实现 |
 |---|---|
 | 页面与舞台 | 原生 HTML / CSS，DOM 分层 2D 插画场景 |
+| 国际化 | 独立 `i18n.js` 字典 + `data-i18n` 静态绑定，无 i18n 库、无构建 |
 | 游戏逻辑 | 原生 JavaScript，seeded RNG 生成姓名、岗位、配色与头像 |
 | 工牌 | CSS 绘制卡套、织带、条码与信息层级 |
 | 海报 | Canvas 2D 绘制，配合本地 `qrcode.min.js` |
@@ -164,12 +171,14 @@ __ZJ.sheet();                 // 并排查看六类工牌
 __ZJ.begin({ drill: true });  // 进入六步教学
 __ZJ.demo('pt');              // 强制生成一张合作方工牌
 __ZJ.commit(-1);              // 模拟往左发放
+__ZJ.setLang('ja');           // 切换语言（zh / en / ja）
 ```
 
 运行完整回归前，需要先启动 `http://localhost:8137/`，并让本机 Chrome 开放 CDP `9222` 端口：
 
 ```bash
-node tools/verify-game.mjs
+node tools/verify-game.mjs     # 玩法端到端回归
+node tools/verify-i18n.mjs     # 三语专项回归
 ```
 
 ---

@@ -10,7 +10,7 @@
 [hidden]{display:none!important}
 html,body{margin:0;height:100%;overflow:hidden;background:#071320}
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   color:#eaf2fb;-webkit-font-smoothing:antialiased;user-select:none;
 }
 button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
@@ -306,6 +306,26 @@ body.portrait .mc .lanyard{height:calc(var(--cw) * .30)}
 }
 body.portrait #stage .mc.back{display:none}
 
+/* ---------- 语言切换 ---------- */
+#langSwitch{position:fixed;top:max(14px,calc(env(safe-area-inset-top) + 10px));right:16px;z-index:60;
+  display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+#langBtn{display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;
+  background:#fffaf0;border:2px solid #2f2a24;color:#2f2a24;
+  box-shadow:3px 4px 0 rgba(47,42,36,.2);font-size:11px;font-weight:800;letter-spacing:.08em}
+#langBtn svg{width:14px;height:14px;flex:none}
+#langMenu{display:flex;flex-direction:column;gap:3px;min-width:104px;padding:6px;border-radius:12px;
+  background:#fffaf0;border:2px solid #2f2a24;box-shadow:5px 6px 0 rgba(47,42,36,.2)}
+#langMenu[hidden]{display:none}
+#langMenu button{padding:7px 10px;border-radius:8px;font-size:12px;font-weight:700;color:#4a4034;
+  text-align:left;letter-spacing:.06em}
+#langMenu button.on{background:#f7e6d5;color:#8c2b24}
+#langMenu button:hover{background:#f7e6d5}
+body.playing .hudRow{padding-right:60px}
+@media (max-width:520px){
+  #langSwitch{right:10px}
+  body.playing .hudRow{padding-right:52px}
+}
+
 /* ---------- HUD ---------- */
 #hud{position:fixed;left:0;right:0;top:0;z-index:30;padding:14px 16px 0;
   display:none;flex-direction:column;gap:8px;pointer-events:none}
@@ -389,6 +409,11 @@ h1{margin:0 0 8px;font-size:clamp(58px,7vw,104px);line-height:.95;font-weight:90
 .rItem.pause b{background:#f4df9b;color:#6d4c12;border:2px solid #8a6a25}
 .rItem span{color:#4a4034;line-height:1.45}
 .rItem span i{font-style:normal;color:#9a8467}
+.keyHint{display:none;align-items:center;gap:8px;margin:2px 0 14px;font-size:11px;color:#8a7458;letter-spacing:.06em;flex-wrap:wrap}
+.keyHint kbd{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 7px;
+  border-radius:7px;background:#fffdf6;border:2px solid rgba(47,42,36,.35);border-bottom-width:3px;
+  font:700 12px ui-monospace,Menlo,monospace;color:#4a4034;box-shadow:0 2px 0 rgba(47,42,36,.12)}
+@media (hover:hover) and (pointer:fine){.keyHint{display:flex}}
 .nameField{display:flex;align-items:center;gap:14px;margin-bottom:16px;font-size:11px;letter-spacing:.12em;color:#8a7458}
 .nameField input{width:190px;padding:10px 13px;border-radius:10px;outline:none;background:#fffdf6;
   border:2px solid rgba(47,42,36,.4);color:#2f2a24;font-size:15px;letter-spacing:.06em;font-family:inherit}
@@ -596,24 +621,35 @@ tr.me td.n b{color:#8c2b24}
 </style>
 </head>
 <body>
+<div id="langSwitch">
+  <button id="langBtn" aria-haspopup="true" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a14 14 0 0 1 0 18"></path><path d="M12 3a14 14 0 0 0 0 18"></path></svg>
+    <span id="langCur">ZH</span>
+  </button>
+  <div id="langMenu" hidden>
+    <button data-lang="zh">简中</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="ja">日</button>
+  </div>
+</div>
 <div id="office" aria-hidden="true">
   <div class="wall"></div>
-  <div class="sign"><b>星潮科技</b><small>XINGCHAO TECH · ADMIN</small></div>
+  <div class="sign"><b data-i18n="ui.signBrand">星潮科技</b><small data-i18n="ui.signSub">XINGCHAO TECH · ADMIN</small></div>
   <div class="desk"></div>
   <div class="papers"><i></i><i></i><i></i></div>
   <div class="giftStack" id="giftStack"></div>
   <div class="cartonWrap">
     <img src="./assets/irasutoya/carton.png" alt="" draggable="false">
-    <div class="cartonLabel"><b>退回</b><small>RETURN</small></div>
+    <div class="cartonLabel"><b data-i18n="ui.returnLabel">退回</b><small data-i18n="ui.returnSub">RETURN</small></div>
   </div>
   <div class="calendar">
     <img src="./assets/irasutoya/calendar.png" alt="" draggable="false">
-    <div class="calOverlay"><b>12/31</b><span>距离续签</span><i>21 天</i></div>
+    <div class="calOverlay"><b>12/31</b><span data-i18n="ui.calRenew">距离续签</span><i data-i18n="ui.calDays">21 天</i></div>
   </div>
   <div class="hr" id="hr">
     <img class="hrNormal" src="./assets/irasutoya/hr01.png" alt="" draggable="false">
     <img class="hrAngry" src="./assets/irasutoya/hr02.png" alt="" draggable="false">
-    <span class="hrTag">HR 总监</span>
+    <span class="hrTag" data-i18n="ui.hrTag">HR 总监</span>
   </div>
 </div>
 <div id="vig"></div>
@@ -621,16 +657,16 @@ tr.me td.n b{color:#8c2b24}
 
 <div id="hud">
   <div class="hudRow">
-    <div class="brandMini">星潮科技 · 行政部</div>
+    <div class="brandMini" data-i18n="ui.brandMini">星潮科技 · 行政部</div>
     <div class="timer"><div id="bar"></div></div>
-    <div class="count"><b id="cnt">0</b>份</div>
+    <div class="count"><b id="cnt">0</b><span data-i18n="ui.unit">份</span></div>
   </div>
 </div>
 
 <div id="tip"></div>
 <div id="toast"></div>
 <div id="penalty" role="status" aria-live="polite" hidden>
-  <span>暂停分拣</span><b id="penaltyNum">4</b><small>秒后恢复</small>
+  <span data-i18n="ui.penaltyTitle">暂停分拣</span><b id="penaltyNum">4</b><small data-i18n="ui.penaltyResume">秒后恢复</small>
   <div class="penTrack"><i id="penaltyBar"></i></div>
 </div>
 <div id="flash"></div>
@@ -640,7 +676,7 @@ tr.me td.n b{color:#8c2b24}
 <div id="zenFx" hidden>
   <div class="zxBox">
     <img src="./assets/irasutoya/cherry.png" alt="" draggable="false">
-    <span>年货</span>
+    <span data-i18n="ui.gift">年货</span>
   </div>
   <img class="zxHanko" src="./assets/irasutoya/hanko.png" alt="" draggable="false">
 </div>
@@ -648,23 +684,24 @@ tr.me td.n b{color:#8c2b24}
 <div id="title" class="screen">
   <div class="tWrap">
     <div class="tLeft">
-      <div class="kicker">星潮科技 · 行政部 · 临时工位</div>
-      <div class="ossBadge">非商用开源 · 无赞助 / 无引流 / 无盈利</div>
-      <h1>自己人</h1>
-      <div class="sub">年底礼品分拣</div>
-      <p class="lede">60 秒，按工牌最下方的「签约主体」分拣年货，正确数量没有上限。头像、颜色、卡套和岗位都不是判断依据。</p>
+      <div class="kicker" data-i18n="ui.kicker">星潮科技 · 行政部 · 临时工位</div>
+      <div class="ossBadge" data-i18n="ui.oss">非商用开源 · 无赞助 / 无引流 / 无盈利</div>
+      <h1 data-i18n="ui.h1">自己人</h1>
+      <div class="sub" data-i18n="ui.sub">年底礼品分拣</div>
+      <p class="lede" data-i18n="ui.lede">60 秒，按工牌最下方的「签约主体」分拣年货，正确数量没有上限。头像、颜色、卡套和岗位都不是判断依据。</p>
       <div class="rule">
-        <div class="rItem ok"><b>往左发</b><span>星潮科技 + 曜辰 / 瀚海 / 赤曜 / 青梧 <i>· 正编 / 实习 / 合作方</i></span></div>
-        <div class="rItem no"><b>往右退回</b><span>其他签约主体 <i>· 内包 / 外包 / 服务商</i></span></div>
-        <div class="rItem pause"><b>错后暂停</b><span>暂停分拣 4 秒，倒计时结束后继续；拖动工牌到左右两侧即可操作。</span></div>
+        <div class="rItem ok"><b data-i18n="ui.ruleLeft">往左发</b><span data-i18n-html="ui.ruleLeftBody">星潮科技 + 曜辰 / 瀚海 / 赤曜 / 青梧 <i>· 正编 / 实习 / 合作方</i></span></div>
+        <div class="rItem no"><b data-i18n="ui.ruleRight">往右退回</b><span data-i18n-html="ui.ruleRightBody">其他签约主体 <i>· 内包 / 外包 / 服务商</i></span></div>
+        <div class="rItem pause"><b data-i18n="ui.rulePause">错后暂停</b><span data-i18n-html="ui.rulePauseBody">暂停分拣 4 秒，倒计时结束后继续；拖动工牌到左右两侧即可操作。</span></div>
       </div>
-      <label class="nameField"><span>工牌姓名</span><input id="nameIn" maxlength="10" placeholder="临时工" autocomplete="off" spellcheck="false"></label>
+      <p class="keyHint" data-i18n-html="ui.keyHint"></p>
+      <label class="nameField"><span data-i18n="ui.nameLabel">工牌姓名</span><input id="nameIn" maxlength="10" data-i18n-ph="ui.namePlaceholder" placeholder="临时工" autocomplete="off" spellcheck="false"></label>
       <div class="startRow">
-        <button id="zenBtn" class="zenBtn" hidden>自己先拿一箱</button>
-        <button id="startBtn" class="primary">开始发放</button>
-        <button id="rankBtn" class="ghost">榜单</button>
+        <button id="zenBtn" class="zenBtn" hidden data-i18n="ui.zenBtn">自己先拿一箱</button>
+        <button id="startBtn" class="primary" data-i18n="ui.startBtn">开始发放</button>
+        <button id="rankBtn" class="ghost" data-i18n="ui.rankBtn">榜单</button>
       </div>
-      <div class="foot"><b>非商用开源作品，无赞助、无引流、无盈利。</b><br>公司、人物、工牌均为虚构；榜单为本地演示数据，不含真实用户信息。</div>
+      <div class="foot" data-i18n-html="ui.foot"><b>非商用开源作品，无赞助、无引流、无盈利。</b><br>公司、人物、工牌均为虚构；榜单为本地演示数据，不含真实用户信息。</div>
     </div>
     <div class="tRight" aria-hidden="true">
       <div class="tScene">
@@ -674,7 +711,7 @@ tr.me td.n b{color:#8c2b24}
         <img class="tGift g1" src="./assets/irasutoya/gift.png" alt="">
         <img class="tGift g2" src="./assets/irasutoya/gift.png" alt="">
         <img class="tCarton" src="./assets/irasutoya/carton.png" alt="">
-        <div class="tRuleStamp">唯一依据<br>签约主体</div>
+        <div class="tRuleStamp" data-i18n-html="ui.ruleStamp">唯一依据<br>签约主体</div>
       </div>
     </div>
   </div>
@@ -684,30 +721,37 @@ tr.me td.n b{color:#8c2b24}
 
 <div id="rank" class="screen" hidden>
   <div class="panel">
-    <div class="pHead"><button id="rankBack" class="iconBtn">←</button><h2>榜单</h2><span class="demoTag">演示数据</span></div>
-    <div class="tabs"><button id="tabDay" class="on">今日</button><button id="tabAll">总榜</button></div>
-    <p class="note">演示榜单：本机数据 + 预设对手</p>
+    <div class="pHead"><button id="rankBack" class="iconBtn">←</button><h2 data-i18n="ui.rankTitle">榜单</h2><span class="demoTag" data-i18n="ui.demoTag">演示数据</span></div>
+    <div class="tabs"><button id="tabDay" class="on" data-i18n="ui.tabDay">今日</button><button id="tabAll" data-i18n="ui.tabAll">总榜</button></div>
+    <p class="note" data-i18n="ui.rankNote">演示榜单：本机数据 + 预设对手</p>
     <div id="rankBody"></div>
   </div>
 </div>
 
 <div id="poster" class="screen" hidden>
   <div class="panel posterP">
-    <div class="pHead"><button id="posterBack" class="iconBtn">←</button><h2>分享海报</h2></div>
+    <div class="pHead"><button id="posterBack" class="iconBtn">←</button><h2 data-i18n="ui.posterTitle">分享海报</h2></div>
     <canvas id="pcv" width="1080" height="1440"></canvas>
     <div class="posterBtns">
-      <button id="savePng" class="primary">保存图片</button>
-      <button id="copyTx" class="ghost">复制文案</button>
+      <button id="savePng" class="primary" data-i18n="ui.savePng">保存图片</button>
+      <button id="copyTx" class="ghost" data-i18n="ui.copyTx">复制文案</button>
     </div>
   </div>
 </div>
 
+<script src="./i18n.js"></script>
 <script src="./vendor/qrcode.min.js"></script>
 <script type="module">
 const $=id=>document.getElementById(id);
 const DUR=60,PEN=4;
 const GR_AT=[5,10,15,20,25,30,35,40,50,60];
-const TITLES=['还没转正','外包行政','内包行政','行政专员','福利专员','礼盒管理员','签收单之神','成本控制鬼才','HRBP','行政总监','工会主席'];
+/* ===== 语言管理 ===== */
+const LANG_HTML={zh:'zh-CN',en:'en',ja:'ja'};
+let lang=detectLang();
+document.documentElement.lang=LANG_HTML[lang];
+const D=()=>I18N[lang];
+const tpath=p=>p.split('.').reduce((o,k)=>o==null?o:o[k],D());
+const titleOf=i=>D().titles[i];
 const gradeI=n=>{let i=0;while(i<GR_AT.length&&n>=GR_AT[i])i++;return i;};
 const sm=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -722,36 +766,22 @@ const rng=seed=>{
   return()=>{s^=s<<13;s>>>=0;s^=s>>>17;s^=s<<5;s>>>=0;return s/4294967296};
 };
 
-/* 工牌类型与视觉配色解耦 */
-const T={
-  ft:{eligible:true,entity:'星潮科技有限公司',mail:'xingchao.com',
-    brand:'星潮科技',en:'XINGCHAO TECH',logo:'xc',idp:'004',strip:'星潮科技 · XINGCHAO TECH · '},
-  intern:{eligible:true,entity:'星潮科技有限公司',mail:'xingchao.com',
-    brand:'星潮科技',en:'XINGCHAO TECH',logo:'xc',idp:'INT-',strip:'星潮科技 · XINGCHAO TECH · '},
-  ins:{eligible:false,entity:'星潮云服（杭州）有限公司',mail:'xingchao-hz.com',
-    brand:'星潮科技',en:'XINGCHAO TECH',logo:'xc',idp:'HZ-',strip:'星潮云服 · XINGCHAO CLOUD · '},
-  out:{eligible:false,entity:'蓝海人力资源服务有限公司',mail:'lanhai-hr.com',
-    brand:'星潮科技',en:'XINGCHAO TECH',logo:'xc',idp:'OD-88',strip:'蓝海人力 · LANHAI HR · '},
-  sp:{eligible:false,entity:'智云企业服务有限公司',mail:'zhiyun-svc.com',
-    brand:'智云服务',en:'ZHIYUN SERVICE',logo:'zy',idp:'SP-77',strip:'智云服务 · ZHIYUN SERVICE · '},
-  pt:{eligible:true}
+/* 工牌类型：公共字段（与语言无关）；文本从 D().badges[co] 取 */
+const CO={
+  ft:{co:'xc',mail:'xingchao.com',logo:'xc',idp:'004',eligible:true},
+  intern:{co:'xc',mail:'xingchao.com',logo:'xc',idp:'INT-',eligible:true},
+  ins:{co:'hz',mail:'xingchao-hz.com',logo:'xc',idp:'HZ-',eligible:false},
+  out:{co:'lh',mail:'lanhai-hr.com',logo:'xc',idp:'OD-88',eligible:false},
+  sp:{co:'zy',mail:'zhiyun-svc.com',logo:'zy',idp:'SP-77',eligible:false}
 };
 const PARTNERS=[
-  {eligible:true,entity:'曜辰互动科技有限公司',mail:'yaochen.tech',brand:'曜辰科技',en:'YAOCHEN TECH',logo:'p0',idp:'YC-',strip:'曜辰科技 · YAOCHEN TECH · '},
-  {eligible:true,entity:'瀚海云科有限公司',mail:'hanhai-cloud.com',brand:'瀚海云科',en:'HANHAI CLOUD',logo:'p1',idp:'HH-',strip:'瀚海云科 · HANHAI CLOUD · '},
-  {eligible:true,entity:'赤曜互动娱乐有限公司',mail:'chiyao.games',brand:'赤曜互动',en:'CHIYAO INTERACTIVE',logo:'p2',idp:'CY-',strip:'赤曜互动 · CHIYAO INTERACTIVE · '},
-  {eligible:true,entity:'青梧数科有限公司',mail:'qingwu-data.com',brand:'青梧数科',en:'QINGWU DATA',logo:'p3',idp:'QW-',strip:'青梧数科 · QINGWU DATA · '}
+  {co:'yc',mail:'yaochen.tech',logo:'p0',idp:'YC-',eligible:true},
+  {co:'hh',mail:'hanhai-cloud.com',logo:'p1',idp:'HH-',eligible:true},
+  {co:'cy',mail:'chiyao.games',logo:'p2',idp:'CY-',eligible:true},
+  {co:'qw',mail:'qingwu-data.com',logo:'p3',idp:'QW-',eligible:true}
 ];
 const SKINS=['t-ft','t-intern','t-ins','t-out','t-sp'];
 const DRILL_TYPES=['ft','intern','pt','out','ins','sp'];
-const DRILL_TIPS=[
-  '正编：签约主体「星潮科技有限公司」→ 往左发',
-  '实习生也签在星潮科技 → 往左发',
-  '合作方大厂也有年货：看清品牌与签约主体 → 往左发',
-  '蓝海人力是供应商 → 往右退回',
-  '内包签的是「星潮云服（杭州）」→ 往右退回',
-  '服务商「智云企业服务」→ 往右退回'
-];
 const TYPE_WEIGHTS={ft:20,intern:10,ins:20,out:15,sp:15,pt:20};
 function pickBadgeType(random=Math.random){
   const entries=Object.entries(TYPE_WEIGHTS);
@@ -764,21 +794,7 @@ function pickBadgeType(random=Math.random){
   return entries[entries.length-1][0];
 }
 
-const NAMES=[
-  ['林思远','lin.sy'],['周雨桐','zhou.yt'],['陈嘉禾','chen.jh'],['徐子墨','xu.zm'],
-  ['何欣然','he.xr'],['赵一鸣','zhao.ym'],['沈知微','shen.zw'],['高远','gao.y'],
-  ['唐若琳','tang.rl'],['韩叙','han.x'],['苏晓','su.x'],['程野','cheng.y'],
-  ['罗一楠','luo.yn'],['蒋珂','jiang.k'],['邱泽','qiu.z'],['白露','bai.l'],
-  ['孟凡','meng.f'],['段思聪','duan.sc'],['顾清','gu.q'],['叶南','ye.n']
-];
-const ROLES={
-  ft:[['P7 高级工程师','平台研发部'],['P6 产品经理','产品部'],['P6 品牌经理','市场部'],['P5 财务专员','财务部'],['P6 视觉设计师','设计中心'],['P7 数据分析师','数据平台部']],
-  intern:[['实习生','平台研发部'],['实习生','产品部'],['实习生','市场部'],['实习生','设计中心']],
-  ins:[['P7 高级工程师','平台研发部'],['P6 产品经理','产品部'],['P6 数据分析师','数据平台部'],['P5 运营专员','增长运营部']],
-  out:[['行政专员（驻场）','行政支持部'],['客服专员（驻场）','客服中心'],['审核专员（驻场）','内容审核部'],['桌面运维（驻场）','IT 运维部']],
-  sp:[['保洁员','物业服务'],['安保员','安保服务'],['维修工','设施服务'],['前台','行政服务']],
-  pt:[['P8 高级工程师','平台研发部'],['P7 产品经理','产品部'],['P7 数据分析师','数据平台部'],['P6 视觉设计师','设计中心'],['P6 运营经理','增长运营部']]
-};
+/* 姓名池 / 岗位池均在 i18n 字典中，按当前语言取用 */
 
 /* ===== 工牌生成 ===== */
 function logoMark(kind){
@@ -811,45 +827,47 @@ function barcode(str){
 
 function genBadge(type,opt={}){
   const seed=opt.seed??((Math.random()*1e9)|0), r=rng(seed);
-  const t=type==='pt'?PARTNERS[(r()*PARTNERS.length)|0]:T[type];
+  const def=type==='pt'?PARTNERS[(r()*PARTNERS.length)|0]:CO[type];
+  const ci=D().badges[def.co];
   const skin=opt.skin||SKINS[(r()*SKINS.length)|0];
-  const p=NAMES[(r()*NAMES.length)|0];
-  const role=ROLES[type][(r()*ROLES[type].length)|0];
-  const tail=type==='ft'?String(100+((r()*900)|0)):String(100+((r()*900)|0));
-  const id=t.idp+tail;
+  const names=D().names, roles=D().roles;
+  const p=names[(r()*names.length)|0];
+  const role=roles[type][(r()*roles[type].length)|0];
+  const tail=String(100+((r()*900)|0));
+  const id=def.idp+tail;
   let email;
-  if(type==='ft') email=p[1]+(1+((r()*9)|0))+'@xingchao.com';
-  else if(type==='intern') email='intern.'+p[1]+'@xingchao.com';
-  else email=p[1]+(1+((r()*9)|0))+'@'+t.mail;
+  if(type==='intern') email='intern.'+p[1]+'@'+def.mail;
+  else email=p[1]+(1+((r()*9)|0))+'@'+def.mail;
   const b={type,seed,name:opt.name||p[0],role:role[0],dept:role[1],id,email,
-    entity:t.entity,eligible:t.eligible,company:t.brand,skin};
+    entity:ci.entity,eligible:def.eligible,company:ci.brand,skin};
+  const bg=D().badge;
   const el=document.createElement('div');
   el.className='mc '+skin+(type==='pt'?' partner':'');
   el.innerHTML=`
     <div class="lanyard">
-      <div class="strap s1"><span class="lw">${t.strip}${t.strip}</span></div>
-      <div class="strap s2"><span class="lw">${t.strip}${t.strip}</span></div>
+      <div class="strap s1"><span class="lw">${ci.strip}${ci.strip}</span></div>
+      <div class="strap s2"><span class="lw">${ci.strip}${ci.strip}</span></div>
     </div>
     <div class="clip"></div>
     <div class="holder">
       <div class="idc">
         <div class="top">
-          <div class="brand">${logoMark(t.logo)}
-            <div class="bt"><b>${t.brand}</b><small>${t.en}</small></div>
+          <div class="brand">${logoMark(def.logo)}
+            <div class="bt"><b>${ci.brand}</b><small>${ci.en}</small></div>
           </div>
         </div>
         <div class="photoWrap">
           <div class="photo">
             ${portraitHTML(seed,b.name,type)}
           </div>
-          <div class="nameStrip"><span>${esc(b.name)}</span><i>员工 / STAFF</i></div>
+          <div class="nameStrip"><span>${esc(b.name)}</span><i>${esc(bg.staffTag)}</i></div>
         </div>
         <div class="body">
           <div class="role">${esc(b.role)} · ${esc(b.dept)}</div>
           <div class="meta"><b>ID ${esc(b.id)}</b><i>${esc(b.email)}</i></div>
-          <div class="contract"><span>签约主体</span><b>${esc(b.entity)}</b></div>
+          <div class="contract"><span>${esc(bg.entityLabel)}</span><b>${esc(b.entity)}</b></div>
         </div>
-        <div class="bot"><span class="bc">${barcode(id)}</span><span class="botTx">员工工牌 · STAFF ID</span></div>
+        <div class="bot"><span class="bc">${barcode(id)}</span><span class="botTx">${esc(bg.staffId)}</span></div>
       </div>
     </div>`;
   el.querySelectorAll('img.pv').forEach(im=>{
@@ -911,7 +929,7 @@ function buildOffice(){
   for(let i=19;i>=0;i--){
     const s=document.createElement('span');
     s.className='gift';
-    s.innerHTML=`<img src="${A_DIR}gift.png" alt="" draggable="false">${i%3===0?'<i>年货</i>':''}`;
+    s.innerHTML=`<img src="${A_DIR}gift.png" alt="" draggable="false">${i%3===0?`<i>${esc(D().ui.gift)}</i>`:''}`;
     stack.appendChild(s);
   }
 }
@@ -949,7 +967,7 @@ function positionBacks(){
 
 /* ===== 预览与背景牌 ===== */
 const nameIn=$('nameIn');
-function myName(){return (nameIn.value||'').trim()||'临时工';}
+function myName(){return (nameIn.value||'').trim()||D().badge.defaultName;}
 function renderPreview(){
   const box=$('preview');
   const b=genBadge('ft',{seed:77123,name:myName()});
@@ -961,7 +979,7 @@ function buildBacks(){
   for(let i=0;i<3;i++){
     const el=document.createElement('div');
     el.className='mc back';
-    el.innerHTML=`<div class="holder"><div class="bk">${logoMark('xc')}<b>星潮科技</b><small>STAFF</small></div></div>`;
+    el.innerHTML=`<div class="holder"><div class="bk">${logoMark('xc')}<b>${esc(D().badge.backBrand)}</b><small>${esc(D().badge.backSub)}</small></div></div>`;
     el.hidden=true;
     stage.appendChild(el);
     backs.push(el);
@@ -1014,7 +1032,7 @@ function spawn(){
   let type,drillTip='';
   if(nextForce){type=nextForce;nextForce=null;}
   else if(G.drill&&G.di<DRILL_TYPES.length){
-    type=DRILL_TYPES[G.di];drillTip=DRILL_TIPS[G.di];G.di++;
+    type=DRILL_TYPES[G.di];drillTip=D().drill[G.di];G.di++;
   }else type=nextType();
 
   const b=genBadge(type);
@@ -1088,17 +1106,27 @@ function commit(dir){
     flashRed();
     document.body.classList.add('shake');
     setTimeout(()=>document.body.classList.remove('shake'),360);
-    let why='看签约主体';
-    if(b.data.type==='out')why='蓝海人力不是星潮科技';
-    else if(b.data.type==='ins')why='内包签的是星潮云服';
-    else if(b.data.type==='sp')why='智云是服务商，不是自己人';
-    else if(b.data.type==='pt')why='合作方大厂也有年货，该往左发';
-    else why='签在星潮科技，该往左发';
-    toast('错了。'+why);
+    const w=D().why;
+    let why;
+    if(b.data.type==='out')why=w.out;
+    else if(b.data.type==='ins')why=w.ins;
+    else if(b.data.type==='sp')why=w.sp;
+    else if(b.data.type==='pt')why=w.pt;
+    else why=w.def;
+    toast(w.prefix+why);
     updateHud();
   }
   setTimeout(spawn,ok?110:280);
 }
+/* ===== 桌面端：左右方向键分拣（仅鼠标型设备；输入框聚焦时不拦截） ===== */
+document.addEventListener('keydown',e=>{
+  if(e.repeat)return;
+  if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')return;
+  const t=e.target;
+  if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+  commit(e.key==='ArrowLeft'?-1:1);
+});
 function consumeGift(){
   const list=giftEls();
   for(let i=list.length-1;i>=0;i--){
@@ -1178,15 +1206,16 @@ function finish(){
   hideBacks();
   hideTip();toastEl.classList.remove('on');
   document.body.classList.remove('playing');
-  const last=G.wg+G.wr>=5?'数目对不上。你是哪家公司签的？':(G.n>=40?'数目对得上。辛苦了。':'数目对得上。');
-  playDlg(['礼品都发完了？','这几箱，你发给谁了？',last],()=>{
+  const f=D().finishDlg;
+  const last=G.wg+G.wr>=5?f.lastBad:(G.n>=40?f.lastGood:f.lastOk);
+  playDlg([f.line1,f.line2,last],()=>{
     showResult(false);
   });
 }
 function playDlg(lines,after){
   const box=document.createElement('div');
   box.className='dlgBox';
-  box.innerHTML='<div class="dlgWho">HR 总监</div>'+lines.map(l=>`<div class="dlgLine">${esc(l)}</div>`).join('');
+  box.innerHTML=`<div class="dlgWho">${esc(D().hrWho)}</div>`+lines.map(l=>`<div class="dlgLine">${esc(l)}</div>`).join('');
   const dlg=$('endDlg');
   dlg.innerHTML='';dlg.appendChild(box);dlg.classList.add('on');
   const els=[...box.querySelectorAll('.dlgLine')];
@@ -1210,41 +1239,43 @@ function showResult(zen){
     ls.set('zj_zen',String(zc));
   }
   const idx=gradeI(n);
-  const title=zen?'解除':TITLES[idx];
+  const R=D().result;
+  const title=zen?R.zenTitle:titleOf(idx);
   lastResult={n,wg,wr,zen,title};
-  const stamp=zen?'解除':(mis===0&&n>0?'零差错':(n>=40?'通过':'待核'));
+  const stamp=zen?R.zenTitle:(mis===0&&n>0?R.stampZero:(n>=40?R.stampPass:R.stampReview));
   const stampOk=!zen&&(mis===0&&n>0||n>=40);
-  const quote=zen?'外包没有。':(mis===0&&n>0?'数目对得上。':(n>=40?'发得挺快，就是有几箱对不上。':'你先说说，这些签收单是谁签的？'));
+  const quote=zen?R.quoteZen:(mis===0&&n>0?R.quoteZero:(n>=40?R.quoteFast:R.quoteElse));
+  const u=R.scoreUnit;
   const scoreLine=zen
-    ? '<div class="resScore">1<small>箱车厘子</small></div>'
-    : `<div class="resScore">${n}<small>份</small></div>`;
+    ? `<div class="resScore">1<small>${esc(R.cherryUnit)}</small></div>`
+    : `<div class="resScore">${n}<small>${esc(u)}</small></div>`;
   const rows=zen
-    ? `<div class="resRow"><span>拿走年货</span><b class="bad">1 份</b></div>
-       <div class="resRow"><span>续签资格</span><b class="bad">已解除</b></div>
-       <div class="resRow"><span>HR 总监的评价</span><b>外包没有。</b></div>`
-    : `<div class="resRow"><span>正确分拣</span><b class="good">${n} 份</b></div>
-       <div class="resRow"><span>错发出去的年货</span><b class="${wg?'bad':''}">${wg} 份</b></div>
-       <div class="resRow"><span>该发却退回仓库的</span><b class="${wr?'bad':''}">${wr} 份</b></div>
-       <div class="resRow"><span>本机最好成绩</span><b>${best} 份</b></div>`;
+    ? `<div class="resRow"><span>${esc(R.rTaken)}</span><b class="bad">1 ${esc(u)}</b></div>
+       <div class="resRow"><span>${esc(R.rRenewal)}</span><b class="bad">${esc(R.renewRevoked)}</b></div>
+       <div class="resRow"><span>${esc(R.rVerdict)}</span><b>${esc(R.quoteZen)}</b></div>`
+    : `<div class="resRow"><span>${esc(R.rCorrect)}</span><b class="good">${n} ${esc(u)}</b></div>
+       <div class="resRow"><span>${esc(R.rWrongSent)}</span><b class="${wg?'bad':''}">${wg} ${esc(u)}</b></div>
+       <div class="resRow"><span>${esc(R.rWrongReturned)}</span><b class="${wr?'bad':''}">${wr} ${esc(u)}</b></div>
+       <div class="resRow"><span>${esc(R.rBest)}</span><b>${best} ${esc(u)}</b></div>`;
   const res=$('result');
   res.innerHTML=`<div class="resP">
     <div class="resTop">
       <div>
-        <div class="resKicker">${zen?'年底盘点 · 特别结局':'今日结算 · 行政部'}</div>
+        <div class="resKicker">${esc(zen?R.kickerZen:R.kickerNormal)}</div>
         ${scoreLine}
         <div class="resTitle">${esc(title)}</div>
       </div>
       <div class="resStamp ${stampOk?'ok':''}">${esc(stamp)}</div>
     </div>
     ${rows}
-    <div class="resMsg">${esc(quote)}${zen?'<br>那箱车厘子，你已经搬回家了。':'<br>工牌上的字，比你想的多。'}</div>
+    <div class="resMsg">${esc(quote)}${zen?'<br>'+esc(R.msgZen):'<br>'+esc(R.msgNormal)}</div>
     <div class="resBtns">
-      <button class="primary" id="againBtn">再发一次</button>
-      <button class="ghost" id="resRank">榜单</button>
-      <button class="ghost" id="resPoster">分享海报</button>
-      <button class="ghost" id="homeBtn">返回首页</button>
+      <button class="primary" id="againBtn">${esc(R.btnAgain)}</button>
+      <button class="ghost" id="resRank">${esc(R.btnRank)}</button>
+      <button class="ghost" id="resPoster">${esc(R.btnPoster)}</button>
+      <button class="ghost" id="homeBtn">${esc(R.btnHome)}</button>
     </div>
-    <div class="bestLine">最好成绩 ${best} 份 · ${esc(TITLES[gradeI(best)])}${zen?'':' · 演示榜单不含真实用户'}</div>
+    <div class="bestLine">${esc(zf(R.bestLine,{n:best,unit:u,title:titleOf(gradeI(best))}))}${zen?'':esc(R.bestLineSuffix)}</div>
   </div>`;
   res.hidden=false;
   $('againBtn').onclick=()=>{res.hidden=true;begin();};
@@ -1282,27 +1313,20 @@ function openRank(from){
   $('tabAll').onclick=()=>renderRank('all');
   renderRank('day');
 }
-const BOTS_DAY=[
-  {n:'不想加班的阿May',s:48,m:0},{n:'行政部小王',s:46,m:1},{n:'外包也是人',s:44,m:0},
-  {n:'年货搬运工',s:43,m:2},{n:'蓝海驻场老张',s:41,m:1},{n:'只想拿车厘子',s:39,m:0},
-  {n:'内包不是自己人',s:37,m:2},{n:'物业老陈',s:36,m:1},{n:'HR总监本人',s:35,m:0}
-];
-const BOTS_ALL=[
-  {n:'签收单之神',s:59,m:0},{n:'工会主席',s:57,m:1},{n:'年底冲业绩',s:56,m:0},
-  {n:'表格战神',s:54,m:3},{n:'蓝海老兵',s:52,m:1},{n:'已转正',s:50,m:0},
-  {n:'行政总监',s:49,m:2},{n:'不想加班',s:47,m:0},{n:'车厘子自由',s:45,m:1},
-  {n:'实习生小周',s:43,m:0}
-];
+let rankBoard='day';
 function renderRank(board){
+  rankBoard=board;
+  const RK=D().rank;
   $('tabDay').classList.toggle('on',board==='day');
   $('tabAll').classList.toggle('on',board==='all');
-  const list=(board==='day'?BOTS_DAY:BOTS_ALL).map(x=>({...x,me:false}));
+  const list=(board==='day'?RK.botsDay:RK.botsAll).map(x=>({...x,me:false}));
   const bn=parseInt(ls.get('zj_best','0'),10)||0;
   const bm=parseInt(ls.get('zj_bestm','0'),10)||0;
   if(ls.get('zj_played',null)&&bn>0){
-    list.push({n:ls.get('zj_name','你')||'你',s:bn,m:bm,me:true});
+    list.push({n:ls.get('zj_name',RK.me)||RK.me,s:bn,m:bm,me:true});
   }
   list.sort((a,b)=>(b.s*1000+999-b.m)-(a.s*1000+999-a.m)||a.m-b.m);
+  const u=D().result.scoreUnit;
   let rk=0,prev=null;
   const rows=list.map((r,i)=>{
     const k=r.s*1000+999-r.m;
@@ -1310,13 +1334,13 @@ function renderRank(board){
     prev=k;
     return `<tr class="${r.me?'me':''} ${rk<=3?'top':''}">
       <td class="r">${rk}</td>
-      <td class="n"><b>${esc(r.n)}</b><small>${esc(TITLES[gradeI(r.s)])} · 错 ${r.m}</small></td>
-      <td class="c">${r.s} 份</td></tr>`;
+      <td class="n"><b>${esc(r.n)}</b><small>${esc(titleOf(gradeI(r.s)))} · ${esc(zf(RK.err,{m:r.m}))}</small></td>
+      <td class="c">${r.s} ${esc(u)}</td></tr>`;
   }).join('');
   const zen=1286+(parseInt(ls.get('zj_zen','0'),10)||0);
-  $('rankBody').innerHTML=`<div class="zenRow">因为一箱车厘子失去续签资格的人 <b>${zen}</b> 人</div>
-    <table class="rank">${rows||'<tr><td></td><td class="n">还没有人发货</td><td></td></tr>'}</table>
-    <p class="note">演示榜单：本机最好成绩 + 预设对手，无真实用户数据。</p>`;
+  $('rankBody').innerHTML=`<div class="zenRow">${zf(RK.zenRow,{n:zen})}</div>
+    <table class="rank">${rows||`<tr><td></td><td class="n">${esc(RK.empty)}</td><td></td></tr>`}</table>
+    <p class="note">${esc(RK.note)}</p>`;
 }
 $('rankBack').onclick=()=>{
   if(rankFrom==='result'){closeScreens();$('result').hidden=false;}
@@ -1325,6 +1349,8 @@ $('rankBack').onclick=()=>{
 $('rankBtn').onclick=()=>openRank('title');
 
 /* ===== 海报 ===== */
+const FONT_CJK='"Hiragino Sans","PingFang SC","Microsoft YaHei",sans-serif';
+const FONT_MONO='ui-monospace,Menlo,monospace';
 function rr(c,x,y,w,h,r){
   c.beginPath();c.moveTo(x+r,y);
   c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);
@@ -1385,11 +1411,12 @@ function paintBadge(c,x,y,w,name,seed){
   c.beginPath();c.moveTo(42,31);c.lineTo(44.5,38);c.lineTo(52,39);c.lineTo(46.5,43.5);
   c.lineTo(48.5,50.5);c.lineTo(42,46.5);c.lineTo(35.5,50.5);c.lineTo(37.5,43.5);
   c.lineTo(32,39);c.lineTo(39.5,38);c.closePath();c.fill();
+  const P=D().poster;
   c.fillStyle='#2f2a24';c.textAlign='left';
-  c.font='900 23px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('星潮科技',70,42);
-  c.fillStyle='#9a8467';c.font='700 8px ui-monospace,Menlo,monospace';
-  c.fillText('X I N G C H A O   T E C H',70,55);
+  c.font='900 23px '+FONT_CJK;
+  c.fillText(P.pbBrand,70,42);
+  c.fillStyle='#9a8467';c.font='700 8px '+FONT_MONO;
+  c.fillText(P.pbBrandEn,70,55);
 
   /* 照片 + 姓名条 */
   paintPortrait(c,24,74,312,214,seed,'#f7e6d5');
@@ -1397,29 +1424,29 @@ function paintBadge(c,x,y,w,name,seed){
   c.strokeStyle='#2f2a24';c.lineWidth=4;
   c.beginPath();c.moveTo(24,288);c.lineTo(336,288);c.stroke();
   c.fillStyle='#2f2a24';c.textAlign='left';
-  c.font='900 27px "PingFang SC","Microsoft YaHei",sans-serif';
+  c.font='900 27px '+FONT_CJK;
   c.fillText(name,34,322);
   c.textAlign='right';c.fillStyle='#9a8467';
-  c.font='700 9px ui-monospace,Menlo,monospace';
-  c.fillText('员工 / STAFF',326,321);
+  c.font='700 9px '+FONT_MONO;
+  c.fillText(P.pbStaff,326,321);
 
   /* 岗位 / 邮箱 / 工号 */
   c.textAlign='left';
-  c.fillStyle='#4a4034';c.font='700 14px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('行政专员（驻场） · 行政支持部',26,358);
-  c.fillStyle='#8a7458';c.font='600 11px ui-monospace,Menlo,monospace';
-  c.fillText('ID OD-8827',26,380);
-  c.textAlign='right';c.fillText('admin.temp@lanhai-hr.com',334,380);
+  c.fillStyle='#4a4034';c.font='700 14px '+FONT_CJK;
+  c.fillText(P.pbRole,26,358);
+  c.fillStyle='#8a7458';c.font='600 11px '+FONT_MONO;
+  c.fillText(P.pbId,26,380);
+  c.textAlign='right';c.fillText(P.pbMail,334,380);
   c.textAlign='left';
 
   /* 签约主体 */
   c.fillStyle='#fff8e7';rr(c,22,392,316,62,6);c.fill();
   c.strokeStyle='#c9a45b';c.lineWidth=2;c.setLineDash([5,4]);rr(c,22,392,316,62,6);c.stroke();
   c.setLineDash([]);
-  c.fillStyle='#9a8467';c.font='700 8px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('签 约 主 体',32,410);
-  c.fillStyle='#8c2b24';c.font='900 15px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('蓝海人力资源服务有限公司',32,432);
+  c.fillStyle='#9a8467';c.font='700 8px '+FONT_CJK;
+  c.fillText(P.pbEntityLabel,32,410);
+  c.fillStyle='#8c2b24';c.font='900 15px '+FONT_CJK;
+  c.fillText(P.pbEntity,32,432);
 
   /* 条码条 */
   c.fillStyle='#2f2a24';c.fillRect(0,462,360,50);
@@ -1427,8 +1454,8 @@ function paintBadge(c,x,y,w,name,seed){
   let bx=24;
   const rr2=rng(8827);
   for(let i=0;i<24;i++){const bw=2+((rr2()*4)|0);c.fillRect(bx,474,bw,26);bx+=bw+3;}
-  c.font='600 7px ui-monospace,Menlo,monospace';c.fillStyle='rgba(251,245,230,.62)';c.textAlign='right';
-  c.fillText('STAFF ID · 员工工牌',338,494);
+  c.font='600 7px '+FONT_MONO;c.fillStyle='rgba(251,245,230,.62)';c.textAlign='right';
+  c.fillText(P.pbStaffId,338,494);
   c.restore();
 }
 function drawQR(c,x,y,size,text){
@@ -1446,6 +1473,7 @@ function drawQR(c,x,y,size,text){
 }
 function drawPoster(){
   const c=$('pcv').getContext('2d');
+  const P=D().poster;
   const W=1080,H=1440;
   c.clearRect(0,0,W,H);
   c.fillStyle='#f7edd8';c.fillRect(0,0,W,H);
@@ -1457,46 +1485,46 @@ function drawPoster(){
   c.strokeRect(60,60,W-120,H-120);
 
   c.textAlign='left';
-  c.fillStyle='#8c2b24';c.font='700 22px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('星 潮 科 技 · 行 政 部',80,124);
-  c.fillStyle='#2f2a24';c.font='900 108px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('自己人',80,252);
-  c.fillStyle='#9a8467';c.font='700 30px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('年底礼品分拣',84,302);
+  c.fillStyle='#8c2b24';c.font='700 22px '+FONT_CJK;
+  c.fillText(P.pBrand,80,124);
+  c.fillStyle='#2f2a24';c.font='900 108px '+FONT_CJK;
+  c.fillText(P.pH1,80,252);
+  c.fillStyle='#9a8467';c.font='700 30px '+FONT_CJK;
+  c.fillText(P.pSub,84,302);
   c.strokeStyle='rgba(47,42,36,.35)';c.lineWidth=2;
   c.beginPath();c.moveTo(84,340);c.lineTo(520,340);c.stroke();
 
   const zen=lastResult&&lastResult.zen;
   const n=lastResult?lastResult.n:0;
-  const title=lastResult?lastResult.title:TITLES[0];
-  c.fillStyle='#8c2b24';c.font='800 44px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText(zen?'「外包没有。」':'「数目对得上。」',80,430);
-  c.fillStyle='#8a7458';c.font='700 20px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText(zen?'特别结局 · 拿走一箱车厘子':'本次正确发放',80,510);
-  c.fillStyle='#2f2a24';c.font='900 132px ui-monospace,Menlo,monospace';
+  const title=lastResult?(zen?D().result.zenTitle:titleOf(gradeI(n))):titleOf(0);
+  c.fillStyle='#8c2b24';c.font='800 44px '+FONT_CJK;
+  c.fillText(zen?P.pQuoteZen:P.pQuoteOk,80,430);
+  c.fillStyle='#8a7458';c.font='700 20px '+FONT_CJK;
+  c.fillText(zen?P.pZenLine:P.pCorrectLine,80,510);
+  c.fillStyle='#2f2a24';c.font='900 132px '+FONT_MONO;
   c.fillText(zen?'1':String(n),80,632);
-  c.fillStyle='#8a7458';c.font='700 32px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText(zen?'箱':'份',80+String(zen?'1':n).length*82,632);
-  c.fillStyle='#c96a2b';c.font='900 38px "PingFang SC","Microsoft YaHei",sans-serif';
+  c.fillStyle='#8a7458';c.font='700 32px '+FONT_CJK;
+  c.fillText(zen?P.pUnitBox:P.pUnitFen,80+String(zen?'1':n).length*82,632);
+  c.fillStyle='#c96a2b';c.font='900 38px '+FONT_CJK;
   c.fillText(title,80,700);
   if(!zen&&lastResult){
-    c.fillStyle='#8a7458';c.font='600 24px "PingFang SC","Microsoft YaHei",sans-serif';
-    c.fillText(`错发 ${lastResult.wg} 份 · 错退 ${lastResult.wr} 份`,80,748);
+    c.fillStyle='#8a7458';c.font='600 24px '+FONT_CJK;
+    c.fillText(zf(P.pErrLine,{a:lastResult.wg,b:lastResult.wr}),80,748);
   }
   paintBadge(c,650,330,350,myName(),77123);
 
   c.fillStyle='#fffaf0';rr(c,80,1040,250,250,14);c.fill();
   c.strokeStyle='#2f2a24';c.lineWidth=4;rr(c,80,1040,250,250,14);c.stroke();
   const ok=drawQR(c,100,1060,210,location.href.split('#')[0]);
-  c.fillStyle='#8a7458';c.font='700 20px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText(ok?'扫码来发年货':'《自己人》· 年底礼品分拣',80,1324);
-  c.fillStyle='#a08a6c';c.font='600 19px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('本作公司、人物、工牌均为虚构；榜单为本地演示数据。',80,1358);
+  c.fillStyle='#8a7458';c.font='700 20px '+FONT_CJK;
+  c.fillText(ok?P.pScan:P.pAlt,80,1324);
+  c.fillStyle='#a08a6c';c.font='600 19px '+FONT_CJK;
+  c.fillText(P.pDisclaimer,80,1358);
   c.textAlign='right';
-  c.fillStyle='rgba(47,42,36,.5)';c.font='700 19px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('《自己人》',W-80,1324);
-  c.fillStyle='#b09a7a';c.font='600 17px "PingFang SC","Microsoft YaHei",sans-serif';
-  c.fillText('插画素材：いらすとや',W-80,1358);
+  c.fillStyle='rgba(47,42,36,.5)';c.font='700 19px '+FONT_CJK;
+  c.fillText(P.pTitle2,W-80,1324);
+  c.fillStyle='#b09a7a';c.font='600 17px '+FONT_CJK;
+  c.fillText(P.pCredit,W-80,1358);
   c.textAlign='left';
 }
 async function openPoster(){
@@ -1515,21 +1543,25 @@ $('savePng').onclick=()=>{
     $('pcv').toBlob(b=>{
       const a=document.createElement('a');
       a.href=URL.createObjectURL(b);
-      a.download='自己人-'+((lastResult&&lastResult.n)||0)+'份.png';
+      a.download=D().misc.filePrefix+'-'+((lastResult&&lastResult.n)||0)+D().result.scoreUnit+'.png';
       a.click();
       setTimeout(()=>URL.revokeObjectURL(a.href),3000);
     },'image/png');
-  }catch(e){toast('当前浏览器不支持保存，请长按图片');}
+  }catch(e){toast(D().misc.saveFail);}
 };
 $('copyTx').onclick=async()=>{
   const n=lastResult?lastResult.n:0;
-  const t=lastResult?lastResult.title:TITLES[0];
-  const txt=`我在《自己人》发了 ${n} 份年货，称号「${t}」。错发 ${lastResult?lastResult.wg:0} 份，错退 ${lastResult?lastResult.wr:0} 份。来试试你能认出几个自己人。`;
+  const t=lastResult?(lastResult.zen?D().result.zenTitle:titleOf(gradeI(n))):titleOf(0);
+  const txt=zf(D().misc.shareText,{
+    n,t,
+    a:lastResult?lastResult.wg:0,
+    b:lastResult?lastResult.wr:0
+  });
   try{
     await navigator.clipboard.writeText(txt);
-    toast('文案已复制');
+    toast(D().misc.copied);
   }catch(e){
-    toast('复制失败，请手动选择');
+    toast(D().misc.copyFail);
   }
 };
 
@@ -1547,7 +1579,8 @@ function startZen(){
   fx.classList.remove('play');
   void fx.offsetWidth;
   fx.classList.add('play');
-  playDlg(['这箱，是给外包的吗？','外包没有。'],()=>{
+  const z=D().zenDlg;
+  playDlg([z.line1,z.line2],()=>{
     showResult(true);
   });
   sndBad();
@@ -1601,12 +1634,85 @@ function loop(t){
   if(hrAnger>0)setHrAnger(hrAnger-dt*1.35);
 }
 
+/* ===== 静态文本绑定与语言切换 ===== */
+function applyStatic(){
+  document.documentElement.lang=LANG_HTML[lang];
+  document.title=D().docTitle;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    el.textContent=tpath(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    el.innerHTML=tpath(el.getAttribute('data-i18n-html'));
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    el.placeholder=tpath(el.getAttribute('data-i18n-ph'));
+  });
+}
+/* 游戏中切换语言：用相同 seed 重建当前工牌，视觉与判定保持一致 */
+function refreshCurrentCard(){
+  if(!G||!G.cur)return;
+  const old=G.cur, type=old.data.type, seed=old.data.seed, rot=old.rot||0;
+  const b=genBadge(type,{seed});
+  b.rot=rot;
+  b.el.style.transition='none';
+  stage.appendChild(b.el);
+  bindDrag(b.el);
+  G.cur=b;
+  setCard(b.el,A.hx,A.hy,rot,1);
+  old.el.remove();
+  if(G.drill){
+    const di=DRILL_TYPES.indexOf(type);
+    if(di>=0)showTip(D().drill[di]);
+  }
+}
+function setLang(l){
+  if(!I18N[l]||l===lang)return;
+  lang=l;
+  ls.set('zj_lang',l);
+  applyStatic();
+  updateLangMenu();
+  document.querySelectorAll('#giftStack .gift i').forEach(el=>{el.textContent=D().ui.gift;});
+  backs.forEach(el=>{
+    const b=el.querySelector('.bk b'),s=el.querySelector('.bk small');
+    if(b)b.textContent=D().badge.backBrand;
+    if(s)s.textContent=D().badge.backSub;
+  });
+  if(!$('title').hidden)renderPreview();
+  if(mode==='play')refreshCurrentCard();
+  if(!$('result').hidden&&lastResult)showResult(lastResult.zen);
+  if(!$('rank').hidden)renderRank(rankBoard);
+  if(!$('poster').hidden)drawPoster();
+}
+const LANG_CUR={zh:'ZH',en:'EN',ja:'JA'};
+function updateLangMenu(){
+  $('langCur').textContent=LANG_CUR[lang];
+  $('langMenu').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+}
+const langBtn=$('langBtn'),langMenu=$('langMenu');
+langBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  const open=langMenu.hidden;
+  langMenu.hidden=!open;
+  langBtn.setAttribute('aria-expanded',String(open));
+});
+langMenu.querySelectorAll('button').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();
+  setLang(b.dataset.lang);
+  langMenu.hidden=true;
+  langBtn.setAttribute('aria-expanded','false');
+}));
+document.addEventListener('click',()=>{
+  if(!langMenu.hidden){langMenu.hidden=true;langBtn.setAttribute('aria-expanded','false');}
+});
+
 /* ===== 启动 ===== */
 buildBacks();
 resize();
 window.addEventListener('resize',resize);
 window.addEventListener('orientationchange',()=>setTimeout(resize,120));
 document.addEventListener('pointerdown',()=>{try{ac().resume();}catch(e){}},{once:true});
+applyStatic();
+updateLangMenu();
 renderPreview();
 showTitle();
 requestAnimationFrame(loop);
@@ -1650,9 +1756,10 @@ window.__ZJ={
     return true;
   },
   clearSheet(){const s=document.getElementById('sheet');if(s)s.remove();},
+  setLang,
   get G(){return G;},
   get mode(){return mode;},
-  get T(){return T;}
+  get lang(){return lang;}
 };
 window.__ready=1;
 </script>

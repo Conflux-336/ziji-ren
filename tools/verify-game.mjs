@@ -122,6 +122,35 @@ try {
   await sleep(4300);
   report.penaltyAfter = await evaluate(`(()=>{const countdownHidden=document.getElementById('penalty').hidden;__ZJ.demo('ft');__ZJ.commit(-1);return {score:Number(document.getElementById('cnt').textContent),countdownHidden}})()`);
 
+  /* ===== 桌面端键盘左右键回归 ===== */
+  const keyDown = (key, code, vk) => send('Input.dispatchKeyEvent', { type: 'keyDown', key, code, windowsVirtualKeyCode: vk, nativeVirtualKeyCode: vk });
+  await evaluate(`__ZJ.showTitle();__ZJ.begin({drill:false});__ZJ.demo('ft')`);
+  await keyDown('ArrowLeft', 'ArrowLeft', 37);
+  await sleep(300);
+  const kbLeft = await evaluate(`Number(document.getElementById('cnt').textContent)`);
+
+  await evaluate(`__ZJ.demo('pt')`);
+  await keyDown('ArrowRight', 'ArrowRight', 39);
+  await sleep(300);
+  const kbWrong = await evaluate(`({score:Number(document.getElementById('cnt').textContent),penalty:!document.getElementById('penalty').hidden})`);
+
+  await keyDown('ArrowLeft', 'ArrowLeft', 37);
+  await sleep(200);
+  const kbDuringPenalty = await evaluate(`Number(document.getElementById('cnt').textContent)`);
+  await sleep(4300);
+
+  await evaluate(`__ZJ.demo('ft');document.getElementById('nameIn').focus()`);
+  await keyDown('ArrowLeft', 'ArrowLeft', 37);
+  await sleep(200);
+  const kbInputFocus = await evaluate(`({score:Number(document.getElementById('cnt').textContent),cardKept:!!__ZJ.G.cur})`);
+  await evaluate(`document.getElementById('nameIn').blur()`);
+
+  await evaluate(`document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft',repeat:true,bubbles:true}))`);
+  await sleep(200);
+  const kbRepeat = await evaluate(`Number(document.getElementById('cnt').textContent)`);
+  const kbHint = await evaluate(`getComputedStyle(document.querySelector('.keyHint')).display`);
+  report.keyboard = { kbLeft, kbWrong, kbDuringPenalty, kbInputFocus, kbRepeat, kbHint };
+
   await navigate();
   await evaluate(`localStorage.clear();__ZJ.showTitle();__ZJ.begin({drill:true})`);
   report.drill = [];
@@ -167,6 +196,15 @@ try {
   await sleep(100);
   report.mobilePenalty = await evaluate(`({visible:!document.getElementById('penalty').hidden,seconds:document.getElementById('penaltyNum').textContent,box:document.getElementById('penalty').getBoundingClientRect().toJSON()})`);
   await shot('/tmp/zj-mobile-penalty.png');
+
+  /* 该 CDP 构建不支持 pointer 媒体特性模拟，用 matchMedia stub 验证 coarse 设备守卫 */
+  await evaluate(`__ZJ.showTitle();__ZJ.begin({drill:false});__ZJ.demo('ft');
+    window.__origMM=window.matchMedia.bind(window);
+    window.matchMedia=q=>q.includes('pointer:fine')?{matches:false}:window.__origMM(q);`);
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'ArrowLeft', code: 'ArrowLeft', windowsVirtualKeyCode: 37, nativeVirtualKeyCode: 37 });
+  await sleep(200);
+  report.mobileKeyboard = await evaluate(`({score:Number(document.getElementById('cnt').textContent),cardKept:!!__ZJ.G.cur,keyHintRule:!!document.querySelector('.keyHint')})`);
+  await evaluate(`window.matchMedia=window.__origMM;delete window.__origMM`);
 
   report.externalRequests = [...new Set(requests.filter(url => /^https?:/.test(url) && new URL(url).origin !== new URL(BASE).origin))];
   report.consoleIssues = consoleIssues;
